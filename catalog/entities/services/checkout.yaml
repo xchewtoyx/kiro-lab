@@ -1,0 +1,18 @@
+schema_version: 1
+kind: Service
+id: service:checkout
+name: Checkout
+description: Turns a basket into an order and hands off to payments.
+lifecycle: production
+owner: team:checkout
+relationships:
+  - type: part_of
+    target: system:storefront
+  - type: implemented_by
+    target: repository:example-shop/checkout
+  - type: provides
+    target: capability:order-placement
+  - type: depends_on
+    target: service:payments-gateway
+  - type: uses
+    target: resource:orders-db

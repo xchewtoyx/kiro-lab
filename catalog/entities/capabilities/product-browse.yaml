@@ -1,0 +1,5 @@
+schema_version: 1
+kind: Capability
+id: capability:product-browse
+name: Product browsing
+description: The ability to deliver product browsing to shoppers.

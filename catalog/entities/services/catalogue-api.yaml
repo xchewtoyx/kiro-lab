@@ -1,0 +1,17 @@
+schema_version: 1
+kind: Service
+id: service:catalogue-api
+name: Catalogue API
+description: Serves product listings and prices to the storefront.
+lifecycle: production
+owner: team:catalogue
+runbook: runbooks/catalogue-api.md
+relationships:
+  - type: part_of
+    target: system:storefront
+  - type: implemented_by
+    target: repository:example-shop/catalogue
+  - type: provides
+    target: capability:product-browse
+  - type: uses
+    target: resource:catalogue-db

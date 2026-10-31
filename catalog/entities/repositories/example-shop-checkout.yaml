@@ -1,0 +1,6 @@
+schema_version: 1
+kind: Repository
+id: repository:example-shop/checkout
+name: example-shop/checkout
+description: Checkout and basket services.
+external_ref: github:example-shop/checkout

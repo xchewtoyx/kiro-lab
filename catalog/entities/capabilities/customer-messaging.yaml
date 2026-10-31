@@ -1,0 +1,5 @@
+schema_version: 1
+kind: Capability
+id: capability:customer-messaging
+name: Customer messaging
+description: The ability to deliver customer messaging to shoppers.

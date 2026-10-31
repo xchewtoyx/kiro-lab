@@ -1,7 +1,8 @@
 # Intent: Service readiness report
 
-Status: DRAFT, all human decisions made (D1–D9). Testable assumptions
-(A1–A8) and technical unknowns (T1–T3) remain open. This is intent only;
+Status: DRAFT. Decisions D1–D9 are made. D10–D11 are open; they came from
+investigating the synthetic catalogue in `catalog/`. Testable assumptions
+(A1–A8) and technical unknown T4 remain open. This is intent only;
 there is no design or implementation yet.
 
 > Naming note: the name "service readiness report" was kept on purpose (D4).
@@ -147,8 +148,20 @@ not chosen.
 
 ### Human decisions still open
 
-None. All human decisions (D1–D9) are made. What remains are the testable
-assumptions and technical unknowns below.
+Both of these came out of investigating the catalogue shape (T1).
+
+- **D10. Which owner evidence counts.** The base catalogue shape has **no
+  per-service owner field**. Ownership is derived: Service →
+  `implemented_by` → Repository → org → `catalog/ownership/domains.yaml`,
+  which gives a *domain*, not a team. The lab adds a declared `owner`
+  field. Does the report count declared owner only, derived domain only,
+  or either? Fixtures that split on this: `payments-gateway` (no declared
+  owner, but a domain is derivable), `feature-flags` (neither: its repo's
+  org is unmapped) and `session-store` (neither: no repository).
+- **D11. Exactly what counts as empty.** D2 says "non-empty", but the data
+  contains cases where that's a judgement call: `""`, whitespace-only
+  `"   "`, `null` and `[]`. Do all four count as missing? The catalogue
+  README treats them as missing *provisionally*.
 
 ### Testable assumptions (can be checked with users or data)
 
@@ -157,15 +170,18 @@ assumptions and technical unknowns below.
 - **A2.** Missing owner and runbook are the gaps that matter most before a
   change.
 - **A3.** The synthetic catalogue has the same shape as the real one it
-  stands in for, so lessons carry over.
+  stands in for, so lessons carry over. *Partly disproved:* the kinds, IDs
+  and relationships match, but `owner` and `runbook` are lab additions
+  the real shape doesn't have.
 - **A4.** Engineers will read "missing" as a prompt to act, not as a block
   or an approval.
 - **A5.** An engineer preparing a change can quickly find the services they
   care about in a full sweep. (Catalogue maintainers are a likely second
   audience; check whether the report is really for them.)
 - **A6.** Placeholder values are rare enough in the catalogue that "present
-  and non-empty" still gives a useful signal. Check this against the
-  synthetic data once it exists (T1).
+  and non-empty" still gives a useful signal. *Can't be tested on the
+  synthetic catalogue,* because its placeholder rate was chosen by hand.
+  It needs real data.
 - **A7.** Engineers reading a report titled "service readiness report" won't
   take a row with both fields recorded as meaning the service is ready or
   approved. Test this by showing sample output to a few engineers and asking
@@ -177,11 +193,19 @@ assumptions and technical unknowns below.
 
 ### Technical unknowns (need investigation once inputs exist)
 
-- **T1. No catalogue data was supplied.** The repo contains only a title
-  README. Format, fields, how services are identified, and size are all
-  unknown.
-- **T2.** What counts as "empty" in the data: an absent key, `null`, `""`,
-  whitespace only, or an empty list? This depends on the catalogue format
-  (T1). (Runbook validation offline is no longer needed after D2.)
-- **T3.** Whether ownership can hold more than one value (for example, a
-  list of teams), and what "non-empty" means in that case.
+- **T1. Resolved.** A synthetic catalogue now lives in
+  [`catalog/`](catalog/README.md). It's one YAML file per entity, with
+  `{kind}:{slug}` IDs and 13 service fixtures (12 parseable, 1
+  deliberately malformed). Findings from the base shape: there was **no
+  runbook concept anywhere** and **no per-service owner** (see D10).
+  Both fields were added as optional Service-only lab fields.
+- **T2. Answered by the data, now a decision (D11).** The fixtures contain
+  an absent key, `""`, whitespace only, `null` and `[]`.
+- **T3. Answered by the data.** `owner` may be a string or a list
+  (`recommendations` has two teams). An empty list is the only
+  list-specific edge case, and it's folded into D11.
+- **T4. New:** the base catalogue requires every file to be valid, and the
+  source repo's validator rejects the whole catalogue if any file is bad.
+  The lab deliberately includes a malformed file (`ledger-export`) to
+  exercise "unknown" (success example 4). How the report coexists with a
+  strict validator is for design, not intent.

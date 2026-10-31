@@ -1,0 +1,19 @@
+schema_version: 1
+kind: Service
+id: service:notifications
+name: Notifications
+description: Sends order confirmation and dispatch emails.
+lifecycle: production
+owner: TBD
+runbook: TODO
+relationships:
+  - type: part_of
+    target: system:fulfilment
+  - type: implemented_by
+    target: repository:example-platform/messaging
+  - type: provides
+    target: capability:customer-messaging
+  - type: depends_on
+    target: service:email-relay
+  - type: uses
+    target: resource:event-bus

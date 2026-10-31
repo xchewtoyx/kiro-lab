@@ -1,0 +1,5 @@
+schema_version: 1
+kind: Resource
+id: resource:event-bus
+name: Event bus
+description: Message queue carrying domain events between services.

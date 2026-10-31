@@ -1,0 +1,5 @@
+schema_version: 1
+kind: Resource
+id: resource:session-cache
+name: Session cache
+description: Key-value cache for short-lived shopper sessions.

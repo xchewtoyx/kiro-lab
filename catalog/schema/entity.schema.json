@@ -1,0 +1,309 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://catalog.example.invalid/schema/entity.schema.json",
+  "title": "Lab catalog entity",
+  "description": "v1 YAML entity shape for the synthetic lab catalog. schema_version is the compatibility key; see catalog/schema/README.md. Entity IDs must be unique across the catalog. The optional Service fields `owner` and `runbook` are a lab extension; their emptiness is deliberately NOT enforced here, so the readiness report has gaps to find.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "id",
+    "name"
+  ],
+  "$defs": {
+    "entityId": {
+      "type": "string",
+      "pattern": "^(?:(?:service|system|capability|resource|project|objective):[a-z0-9](?:[a-z0-9._/-]*[a-z0-9])?|repository:[a-z0-9](?:[a-z0-9._-]*[a-z0-9])?/[a-z0-9](?:[a-z0-9._-]*[a-z0-9])?)$",
+      "description": "Stable identifier of the form {kind}:{slug}. Repository slugs are owner/repo. Unique across the catalog."
+    },
+    "serviceId": {
+      "type": "string",
+      "pattern": "^service:[a-z0-9](?:[a-z0-9._/-]*[a-z0-9])?$"
+    },
+    "systemId": {
+      "type": "string",
+      "pattern": "^system:[a-z0-9](?:[a-z0-9._/-]*[a-z0-9])?$"
+    },
+    "capabilityId": {
+      "type": "string",
+      "pattern": "^capability:[a-z0-9](?:[a-z0-9._/-]*[a-z0-9])?$"
+    },
+    "resourceId": {
+      "type": "string",
+      "pattern": "^resource:[a-z0-9](?:[a-z0-9._/-]*[a-z0-9])?$"
+    },
+    "repositoryId": {
+      "type": "string",
+      "pattern": "^repository:[a-z0-9](?:[a-z0-9._-]*[a-z0-9])?/[a-z0-9](?:[a-z0-9._-]*[a-z0-9])?$",
+      "description": "Repository IDs use owner/repo as the slug."
+    },
+    "projectId": {
+      "type": "string",
+      "pattern": "^project:[a-z0-9](?:[a-z0-9._/-]*[a-z0-9])?$"
+    },
+    "objectiveId": {
+      "type": "string",
+      "pattern": "^objective:[a-z0-9](?:[a-z0-9._/-]*[a-z0-9])?$"
+    },
+    "githubRef": {
+      "type": "string",
+      "pattern": "^github:[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$",
+      "description": "Stable repository reference. Do not copy volatile fields."
+    },
+    "linearProjectRef": {
+      "type": "string",
+      "pattern": "^linear:project:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "linearInitiativeRef": {
+      "type": "string",
+      "pattern": "^linear:initiative:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "Service",
+        "System",
+        "Capability",
+        "Resource",
+        "Repository",
+        "Project",
+        "Objective"
+      ]
+    },
+    "id": {
+      "$ref": "#/$defs/entityId"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string"
+    },
+    "lifecycle": {
+      "type": "string",
+      "enum": [
+        "experimental",
+        "production",
+        "deprecated"
+      ]
+    },
+    "owner": {
+      "description": "LAB EXTENSION (Service only). Declared owning team(s). May be a string, a list, empty, or null in fixtures on purpose.",
+      "type": [
+        "string",
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "runbook": {
+      "description": "LAB EXTENSION (Service only). Path or URL of the runbook. May be empty or null in fixtures on purpose.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "external_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "target"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "target": {
+            "$ref": "#/$defs/entityId"
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "Service"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/serviceId"
+          }
+        }
+      },
+      "else": {
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "owner"
+              ]
+            },
+            {
+              "required": [
+                "runbook"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "System"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/systemId"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "Capability"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/capabilityId"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "Resource"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/resourceId"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "Repository"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "external_ref"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/repositoryId"
+          },
+          "external_ref": {
+            "$ref": "#/$defs/githubRef"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "Project"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "external_ref"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/projectId"
+          },
+          "external_ref": {
+            "$ref": "#/$defs/linearProjectRef"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "Objective"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "external_ref"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/objectiveId"
+          },
+          "external_ref": {
+            "$ref": "#/$defs/linearInitiativeRef"
+          }
+        }
+      }
+    }
+  ]
+}

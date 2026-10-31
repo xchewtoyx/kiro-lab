@@ -1,0 +1,12 @@
+schema_version: 1
+kind: Service
+id: service:feature-flags
+name: Feature Flags
+description: Serves feature flag values to storefront services.
+lifecycle: production
+runbook: https://runbooks.example.com/feature-flags
+relationships:
+  - type: part_of
+    target: system:platform-core
+  - type: implemented_by
+    target: repository:example-vendor-forks/flag-server

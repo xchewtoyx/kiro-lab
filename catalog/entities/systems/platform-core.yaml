@@ -1,0 +1,5 @@
+schema_version: 1
+kind: System
+id: system:platform-core
+name: Platform Core
+description: Shared services other systems build on.

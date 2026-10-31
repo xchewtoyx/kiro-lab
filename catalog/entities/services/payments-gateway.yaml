@@ -1,0 +1,16 @@
+schema_version: 1
+kind: Service
+id: service:payments-gateway
+name: Payments Gateway
+description: Brokers card payments with a fictional payment provider.
+lifecycle: production
+runbook: runbooks/payments-gateway.md
+relationships:
+  - type: part_of
+    target: system:payments
+  - type: implemented_by
+    target: repository:example-platform/payments
+  - type: provides
+    target: capability:card-payments
+  - type: uses
+    target: resource:orders-db

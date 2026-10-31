@@ -1,0 +1,6 @@
+schema_version: 1
+kind: Repository
+id: repository:example-labs/recs-prototype
+name: example-labs/recs-prototype
+description: Recommendations prototype.
+external_ref: github:example-labs/recs-prototype

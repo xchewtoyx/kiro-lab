@@ -1,0 +1,19 @@
+schema_version: 1
+kind: Service
+id: service:recommendations
+name: Recommendations
+description: Suggests related products on product pages.
+lifecycle: experimental
+owner:
+  - team:discovery
+  - team:data-science
+runbook: runbooks/recommendations.md
+relationships:
+  - type: part_of
+    target: system:storefront
+  - type: implemented_by
+    target: repository:example-labs/recs-prototype
+  - type: provides
+    target: capability:product-browse
+  - type: depends_on
+    target: service:catalogue-api

@@ -1,0 +1,6 @@
+schema_version: 1
+kind: Repository
+id: repository:example-shop/catalogue
+name: example-shop/catalogue
+description: Catalogue API and image resizer.
+external_ref: github:example-shop/catalogue

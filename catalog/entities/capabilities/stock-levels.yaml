@@ -1,0 +1,5 @@
+schema_version: 1
+kind: Capability
+id: capability:stock-levels
+name: Accurate stock levels
+description: The ability to deliver accurate stock levels to shoppers.

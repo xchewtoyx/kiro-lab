@@ -1,0 +1,24 @@
+# SYNTHETIC. Declared ownership-domain policy: maps a repository's
+# organization to an ownership domain. This is the *derived* ownership path
+# (Service -> implemented_by -> Repository -> org -> domain), separate from
+# the per-service `owner` lab field.
+schema_version: 1
+domains:
+  - id: storefront
+    name: Storefront
+    github_organization: example-shop
+    purpose: >
+      Customer-facing shop services: browsing, search, basket and checkout.
+  - id: platform
+    name: Platform
+    github_organization: example-platform
+    purpose: >
+      Shared infrastructure and durable services other domains build on:
+      payments, messaging, identity and storage.
+  - id: labs
+    name: Labs
+    github_organization: example-labs
+    purpose: >
+      Prototypes and experiments that are not expected to keep running.
+# Deliberately unmapped: the organization `example-vendor-forks` appears on
+# a repository but has no domain here (fixture for derived-owner unknowns).

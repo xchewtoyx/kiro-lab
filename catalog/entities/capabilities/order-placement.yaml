@@ -1,0 +1,5 @@
+schema_version: 1
+kind: Capability
+id: capability:order-placement
+name: Order placement
+description: The ability to deliver order placement to shoppers.

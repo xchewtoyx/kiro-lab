@@ -1,0 +1,17 @@
+schema_version: 1
+kind: Service
+id: service:inventory-sync
+name: Inventory Sync
+description: Reconciles stock levels from the warehouse feed every few minutes.
+lifecycle: production
+owner: ""
+runbook: "   "
+relationships:
+  - type: part_of
+    target: system:fulfilment
+  - type: implemented_by
+    target: repository:example-platform/fulfilment
+  - type: provides
+    target: capability:stock-levels
+  - type: uses
+    target: resource:event-bus
