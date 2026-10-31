@@ -31,17 +31,17 @@ There is one entity per YAML file, each directly under its kind's directory.
 
 ## Where ownership and runbook evidence lives
 
-In this lab, two sources could count as owner evidence:
+**Owner must be explicit** (`intent.md` D10). Only the optional Service
+fields `owner` and `runbook` count as evidence. They're a lab extension
+(see [`schema/README.md`](schema/README.md)) and sit right after
+`lifecycle` in each service file.
 
-1. **Declared:** the optional Service fields `owner` and `runbook`
-   (a lab extension; see [`schema/README.md`](schema/README.md)). In
-   each service file they sit right after `lifecycle`.
-2. **Derived (from the base shape):** Service → `implemented_by` →
-   Repository → `github:<org>/…` → `ownership/domains.yaml`. This gives
-   a *domain*, not a team. There's no derived path for runbooks.
-
-Which of these the report treats as owner evidence is an open decision in
-`intent.md` (D10).
+The base shape also lets you *derive* an ownership domain: Service →
+`implemented_by` → Repository → `github:<org>/…` →
+`ownership/domains.yaml`. That path is kept so the catalogue shape is
+faithful, but it is **not owner evidence**. A domain names an area, not an
+accountable team. The "Derived domain" column below shows where the two
+would disagree.
 
 ## Service fixtures
 
@@ -49,13 +49,13 @@ Each service exercises a case from `intent.md`. "Expected" applies the
 D2 rule (present and non-empty means **recorded**) to the declared fields
 only.
 
-| Service | `owner` | `runbook` | Derived domain | Case exercised | Expected (declared) |
+| Service | `owner` | `runbook` | Derived domain | Case exercised | Expected |
 |---|---|---|---|---|---|
 | `catalogue-api` | `team:catalogue` | local path | storefront | both recorded (ex. 1, 5a) | owner recorded, runbook recorded |
 | `basket` | `team:checkout` | local path | storefront | both recorded, experimental | owner recorded, runbook recorded |
 | `search-indexer` | `team:search` | URL | storefront | runbook as a URL | owner recorded, runbook recorded |
 | `checkout` | `team:checkout` | *key absent* | storefront | runbook missing (ex. 3) | owner recorded, runbook missing |
-| `payments-gateway` | *key absent* | local path | platform | owner missing but a domain is derivable (D10) | owner missing, runbook recorded |
+| `payments-gateway` | *key absent* | local path | platform | owner missing even though a domain is derivable (D10: not evidence) | owner missing, runbook recorded |
 | `feature-flags` | *key absent* | URL | **unmapped org** | owner missing, no derived domain either | owner missing, runbook recorded |
 | `inventory-sync` | `""` | `"   "` | platform | empty string / whitespace only (D11) | owner missing, runbook missing *(provisional: D11)* |
 | `image-resizer` | `[]` | `null` | storefront | empty list / null (D11) | owner missing, runbook missing *(provisional: D11)* |

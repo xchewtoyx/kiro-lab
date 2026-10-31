@@ -1,6 +1,6 @@
 # Intent: Service readiness report
 
-Status: DRAFT. Decisions D1–D9 are made. D10–D11 are open; they came from
+Status: DRAFT. Decisions D1–D10 are made. D11 is open; it came from
 investigating the synthetic catalogue in `catalog/`. Testable assumptions
 (A1–A8) and technical unknown T4 remain open. This is intent only;
 there is no design or implementation yet.
@@ -50,6 +50,9 @@ it never says a recorded value is correct.
   Placeholders such as `TBD` count as recorded (decided: D2). This includes
   not checking whether runbook links resolve, whether owners exist, or
   whether runbook content is correct or current.
+- Does not infer an owner from anything else: not the implementing
+  repository, its organization, the ownership domain, or related services.
+  Only an `owner` value written on the service counts (decided: D10).
 - Does not read live systems, production catalogues, monitoring or
   deployment tooling.
 - Does not check any field other than owner and runbook: no on-call rota,
@@ -82,6 +85,10 @@ it never says a recorded value is correct.
 2. Service has no owner field. The report says: owner missing.
 3. Service has a runbook field that is empty. The report says: runbook
    missing, not "recorded".
+2a. Service has no `owner` field, but its repository's org maps to an
+   ownership domain (for example, `payments-gateway`). The report still
+   says: owner missing. The domain is not shown as an owner or as a
+   fallback.
 3a. Service has `owner: TBD`. The report shows owner as recorded. This is
    the accepted limit of D2, and the wording "recorded" must not suggest
    the value was checked.
@@ -133,6 +140,13 @@ not chosen.
   "Gap counts only" and "recorded and missing counts" were considered and not
   chosen. Accepted consequence: there is no "checked N services" line, so
   the output itself doesn't show that nothing was dropped (see A8).
+- **D10. Owner must be explicit:** only a declared `owner` value on the
+  service counts as owner evidence. Ownership derived through
+  `implemented_by` → Repository → org → `ownership/domains.yaml` does not
+  count, even as a fallback. "Derived only" and "either" were considered
+  and not chosen. Accepted consequence: `payments-gateway` reports owner
+  missing although a domain is derivable. A domain identifies an area,
+  not an accountable team.
 - **D8. No "what this is not" statement in the output.** A required
   disclaimer line, and a disclaimer only on all-clean reports, were
   considered and not chosen. The per-field wording is the only safeguard
@@ -148,16 +162,8 @@ not chosen.
 
 ### Human decisions still open
 
-Both of these came out of investigating the catalogue shape (T1).
+This came out of investigating the catalogue shape (T1).
 
-- **D10. Which owner evidence counts.** The base catalogue shape has **no
-  per-service owner field**. Ownership is derived: Service →
-  `implemented_by` → Repository → org → `catalog/ownership/domains.yaml`,
-  which gives a *domain*, not a team. The lab adds a declared `owner`
-  field. Does the report count declared owner only, derived domain only,
-  or either? Fixtures that split on this: `payments-gateway` (no declared
-  owner, but a domain is derivable), `feature-flags` (neither: its repo's
-  org is unmapped) and `session-store` (neither: no repository).
 - **D11. Exactly what counts as empty.** D2 says "non-empty", but the data
   contains cases where that's a judgement call: `""`, whitespace-only
   `"   "`, `null` and `[]`. Do all four count as missing? The catalogue
@@ -198,7 +204,8 @@ Both of these came out of investigating the catalogue shape (T1).
   `{kind}:{slug}` IDs and 13 service fixtures (12 parseable, 1
   deliberately malformed). Findings from the base shape: there was **no
   runbook concept anywhere** and **no per-service owner** (see D10).
-  Both fields were added as optional Service-only lab fields.
+  Both fields were added as optional Service-only lab fields; per D10,
+  the declared `owner` field is the only owner evidence.
 - **T2. Answered by the data, now a decision (D11).** The fixtures contain
   an absent key, `""`, whitespace only, `null` and `[]`.
 - **T3. Answered by the data.** `owner` may be a string or a list
