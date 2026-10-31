@@ -201,8 +201,8 @@ None. All human decisions (D1–D11) are made.
 
 - **T1. Resolved.** A synthetic catalogue now lives in
   [`catalog/`](catalog/README.md). It's one YAML file per entity, with
-  `{kind}:{slug}` IDs and 13 service fixtures (12 parseable, 1
-  deliberately malformed). Findings from the base shape: there was **no
+  `{kind}:{slug}` IDs and 14 service fixtures: 12 valid, 1 that parses
+  but breaks the schema, and 1 that is deliberately unparseable. Findings from the base shape: there was **no
   runbook concept anywhere** and **no per-service owner** (see D10).
   Both fields were added as optional Service-only lab fields; per D10,
   the declared `owner` field is the only owner evidence.

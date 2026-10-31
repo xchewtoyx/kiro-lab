@@ -26,8 +26,12 @@ approved.
 - **Recorded:** the field is present and its value is non-empty.
 - **Missing:** the key is absent, or its value is `""`, whitespace only,
   `null` or `[]` (D11).
-- **Unknown:** the report could not read the service file, so it can't
-  say whether the field is recorded or missing.
+- **Invalid service file:** a service file that parses but does not
+  conform to `catalog/schema/entity.schema.json`, or whose `kind` is not
+  `Service`. Empty values (`""`, whitespace, `null`, `[]`) are
+  schema-valid, so on their own they don't make a file invalid.
+- **Unknown:** the report could not read the service file, or the file is
+  invalid, so it can't say whether the field is recorded or missing.
 - **Field state:** exactly one of recorded, missing or unknown.
 
 ## Requirements
@@ -47,12 +51,12 @@ Traces to: D1, D6, ex. 5.
 2. THE report SHALL include services whose owner and runbook are both
    recorded. It SHALL NOT list only services with gaps.
 3. THE report SHALL identify each entry by the service's `id` when it can
-   be read, and otherwise by the service file's path.
+   be read, and otherwise by the service file's path (see 4.5).
 4. WHEN the report runs twice against an unchanged catalogue, THE report
    SHALL produce identical output.
 5. THE report SHALL NOT produce entries for files outside the services
-   directory. (How a non-Service entity inside that directory is handled
-   is open question Q1.)
+   directory. A non-Service entity inside that directory is an invalid
+   service file (4.4).
 
 ### Requirement 2: Owner state
 
@@ -101,7 +105,7 @@ Traces to: D2, D11, ex. 1, 3.
 records shown as unknown, so that a broken record is never mistaken for
 one with no gaps.
 
-Traces to: constraints ("unknown, never no gaps"), ex. 4, T4.
+Traces to: constraints ("unknown, never no gaps"), ex. 4, T4, Q1.
 
 #### Acceptance criteria
 
@@ -114,7 +118,12 @@ Traces to: constraints ("unknown, never no gaps"), ex. 4, T4.
 3. IF the catalogue's services directory is absent or cannot be read,
    THEN THE report SHALL fail with an error stating this. It SHALL NOT
    produce an empty report.
-4. *(Open question Q1: service files that parse but break the schema.)*
+4. IF a service file is invalid, THEN THE report SHALL list it with owner
+   state unknown and runbook state unknown, even if one of the two fields
+   would be recorded or missing on its own. (Decided: Q1.)
+5. WHEN an unreadable or invalid service file has an `id` that matches the
+   Service ID grammar, THE report SHALL identify it by that `id`.
+   Otherwise THE report SHALL identify it by its file path.
 
 ### Requirement 5: Wording and shape of the output
 
@@ -177,18 +186,22 @@ restated as requirements.
 | `service:recommendations` | recorded | recorded | 2.2 (two owners) |
 | `service:email-relay` | recorded | recorded | 3.3 (path doesn't exist) |
 | `service:session-store` | missing | missing | 2.3, 3.2 (deprecated, no repo) |
-| `catalog/entities/services/ledger-export.yaml` | unknown | unknown | 4.1, 4.2, 1.3 |
+| `service:stock-alerts` | unknown | unknown | 4.4, 4.5 (`owner: 42`; runbook alone would be recorded) |
+| `catalog/entities/services/ledger-export.yaml` | unknown | unknown | 4.1, 4.2, 4.5 |
 
-That's 13 entries in total (1.1). No entry may carry an overall verdict
+That's 14 entries in total (1.1). No entry may carry an overall verdict
 (5.2), and the output has no counts (5.3).
+
+## Decided while writing requirements
+
+- **Q1. Parseable but invalid service files → unknown (option a).** They're
+  treated like unreadable files, with both fields unknown (4.4). "Judge the
+  fields as written" and "unknown only for the broken field" were
+  considered and not chosen. Accepted consequence: a valid runbook in an
+  invalid file isn't reported as recorded.
 
 ## Open questions (to settle before design)
 
-- **Q1. Parseable but invalid service files.** A file that is valid YAML
-  but breaks the schema: for example `owner: 42`, `runbook: [a, b]`, a
-  missing `id`, or `kind: System` in the services directory. Is that
-  service shown as unknown, or are its fields judged as written? No
-  fixture covers this yet.
 - **Q2. Lists of blank entries.** Is `owner: ["", "  "]` recorded (the
   list has entries) or missing (no entry names anyone)? D11 covers `[]`
   but not this case.

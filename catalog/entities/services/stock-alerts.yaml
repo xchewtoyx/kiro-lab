@@ -1,0 +1,15 @@
+schema_version: 1
+kind: Service
+id: service:stock-alerts
+name: Stock Alerts
+description: Warns the warehouse team when a product's stock runs low.
+lifecycle: experimental
+owner: 42
+runbook: runbooks/stock-alerts.md
+relationships:
+  - type: part_of
+    target: system:fulfilment
+  - type: implemented_by
+    target: repository:example-platform/fulfilment
+  - type: provides
+    target: capability:stock-levels

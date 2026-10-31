@@ -64,13 +64,15 @@ only (D10). Absent, `""`, whitespace only, `null` and `[]` all count as
 | `recommendations` | two teams (list) | local path | labs | more than one owner (T3) | owner recorded, runbook recorded |
 | `email-relay` | `team:messaging` | `runbooks/does-not-exist.md` | platform | value not checked (D2) | owner recorded, runbook recorded |
 | `session-store` | *key absent* | *key absent* | **no repository** | deprecated, nothing recorded | owner missing, runbook missing |
-| `ledger-export` | — | — | — | **file is not valid YAML** (ex. 4) | unknown |
+| `stock-alerts` | `42` | local path | platform | **valid YAML but breaks the schema** (Q1) | unknown, unknown |
+| `ledger-export` | — | — | — | **file is not valid YAML** (ex. 4) | unknown, unknown |
 
 Notes:
 
-* `ledger-export.yaml` is broken on purpose: it has an unclosed quote and
-  bad indentation. It's the only file that fails to parse; every other
-  entity is schema-valid and only references entities that exist.
+* Two service files are broken on purpose. `ledger-export.yaml` isn't
+  valid YAML (an unclosed quote and bad indentation). `stock-alerts.yaml`
+  parses, but `owner: 42` breaks the schema. Every other entity is
+  schema-valid and only references entities that exist.
 * None of the local runbook paths point to real files. Under D2 that
   doesn't matter: only presence is checked.
 * The project `project:checkout-retry` `changes` `checkout` and
