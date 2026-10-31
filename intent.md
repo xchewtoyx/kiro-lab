@@ -1,6 +1,6 @@
 # Intent: Service readiness report
 
-Status: DRAFT. Decisions D1–D10 are made. D11 is open; it came from
+Status: DRAFT. All human decisions (D1–D11) are made; D10–D11 came from
 investigating the synthetic catalogue in `catalog/`. Testable assumptions
 (A1–A8) and technical unknown T4 remain open. This is intent only;
 there is no design or implementation yet.
@@ -36,7 +36,8 @@ touches. They can then fill those gaps or flag them before the change goes
 ahead.
 
 The report states facts about catalogue records only: a field is **recorded**
-(present and non-empty), **missing** (absent or empty), or **unknown** (the
+(present and non-empty), **missing** (absent key, `""`, whitespace only,
+`null` or `[]`; decided: D11), or **unknown** (the
 record can't be read). It never says anything about the service itself, and
 it never says a recorded value is correct.
 
@@ -147,6 +148,10 @@ not chosen.
   and not chosen. Accepted consequence: `payments-gateway` reports owner
   missing although a domain is derivable. A domain identifies an area,
   not an accountable team.
+- **D11. What counts as empty:** an absent key, `""`, whitespace only,
+  `null` and `[]` all count as **missing**. "Only `""` and `[]`" and
+  "missing, plus which kind of empty" were considered and not chosen. The
+  report doesn't say which kind of empty a field was.
 - **D8. No "what this is not" statement in the output.** A required
   disclaimer line, and a disclaimer only on all-clean reports, were
   considered and not chosen. The per-field wording is the only safeguard
@@ -162,12 +167,7 @@ not chosen.
 
 ### Human decisions still open
 
-This came out of investigating the catalogue shape (T1).
-
-- **D11. Exactly what counts as empty.** D2 says "non-empty", but the data
-  contains cases where that's a judgement call: `""`, whitespace-only
-  `"   "`, `null` and `[]`. Do all four count as missing? The catalogue
-  README treats them as missing *provisionally*.
+None. All human decisions (D1–D11) are made.
 
 ### Testable assumptions (can be checked with users or data)
 
@@ -206,11 +206,11 @@ This came out of investigating the catalogue shape (T1).
   runbook concept anywhere** and **no per-service owner** (see D10).
   Both fields were added as optional Service-only lab fields; per D10,
   the declared `owner` field is the only owner evidence.
-- **T2. Answered by the data, now a decision (D11).** The fixtures contain
+- **T2. Resolved by D11.** The fixtures contain
   an absent key, `""`, whitespace only, `null` and `[]`.
 - **T3. Answered by the data.** `owner` may be a string or a list
   (`recommendations` has two teams). An empty list is the only
-  list-specific edge case, and it's folded into D11.
+  list-specific edge case, and it counts as missing (D11).
 - **T4. New:** the base catalogue requires every file to be valid, and the
   source repo's validator rejects the whole catalogue if any file is bad.
   The lab deliberately includes a malformed file (`ledger-export`) to

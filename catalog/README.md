@@ -47,7 +47,8 @@ would disagree.
 
 Each service exercises a case from `intent.md`. "Expected" applies the
 D2 rule (present and non-empty means **recorded**) to the declared fields
-only.
+only (D10). Absent, `""`, whitespace only, `null` and `[]` all count as
+**missing** (D11).
 
 | Service | `owner` | `runbook` | Derived domain | Case exercised | Expected |
 |---|---|---|---|---|---|
@@ -57,8 +58,8 @@ only.
 | `checkout` | `team:checkout` | *key absent* | storefront | runbook missing (ex. 3) | owner recorded, runbook missing |
 | `payments-gateway` | *key absent* | local path | platform | owner missing even though a domain is derivable (D10: not evidence) | owner missing, runbook recorded |
 | `feature-flags` | *key absent* | URL | **unmapped org** | owner missing, no derived domain either | owner missing, runbook recorded |
-| `inventory-sync` | `""` | `"   "` | platform | empty string / whitespace only (D11) | owner missing, runbook missing *(provisional: D11)* |
-| `image-resizer` | `[]` | `null` | storefront | empty list / null (D11) | owner missing, runbook missing *(provisional: D11)* |
+| `inventory-sync` | `""` | `"   "` | platform | empty string / whitespace only (D11) | owner missing, runbook missing |
+| `image-resizer` | `[]` | `null` | storefront | empty list / null (D11) | owner missing, runbook missing |
 | `notifications` | `TBD` | `TODO` | platform | placeholders count as recorded (ex. 3a) | owner recorded, runbook recorded |
 | `recommendations` | two teams (list) | local path | labs | more than one owner (T3) | owner recorded, runbook recorded |
 | `email-relay` | `team:messaging` | `runbooks/does-not-exist.md` | platform | value not checked (D2) | owner recorded, runbook recorded |
