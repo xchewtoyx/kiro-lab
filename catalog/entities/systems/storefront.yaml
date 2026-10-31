@@ -1,0 +1,5 @@
+schema_version: 1
+kind: System
+id: system:storefront
+name: Storefront
+description: Everything a shopper touches between landing and paying.

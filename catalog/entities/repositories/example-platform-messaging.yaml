@@ -1,0 +1,6 @@
+schema_version: 1
+kind: Repository
+id: repository:example-platform/messaging
+name: example-platform/messaging
+description: Notifications and email relay.
+external_ref: github:example-platform/messaging

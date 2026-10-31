@@ -1,0 +1,5 @@
+schema_version: 1
+kind: System
+id: system:fulfilment
+name: Fulfilment
+description: Stock, dispatch and customer updates after an order.

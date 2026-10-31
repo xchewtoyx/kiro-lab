@@ -1,0 +1,9 @@
+schema_version: 1
+kind: Objective
+id: objective:reliable-checkout
+name: Reliable checkout
+description: Fewer failed or abandoned checkouts.
+external_ref: linear:initiative:00000000-0000-4000-8000-000000000001
+relationships:
+  - type: targets
+    target: capability:order-placement

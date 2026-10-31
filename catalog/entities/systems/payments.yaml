@@ -1,0 +1,5 @@
+schema_version: 1
+kind: System
+id: system:payments
+name: Payments
+description: Taking and settling payments.

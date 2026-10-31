@@ -1,0 +1,5 @@
+schema_version: 1
+kind: Resource
+id: resource:object-store
+name: Object store
+description: Blob storage for product images.

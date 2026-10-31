@@ -1,0 +1,15 @@
+schema_version: 1
+kind: Service
+id: service:image-resizer
+name: Image Resizer
+description: Produces thumbnail sizes of product photos on upload.
+lifecycle: production
+owner: []
+runbook: null
+relationships:
+  - type: part_of
+    target: system:storefront
+  - type: implemented_by
+    target: repository:example-shop/catalogue
+  - type: uses
+    target: resource:object-store

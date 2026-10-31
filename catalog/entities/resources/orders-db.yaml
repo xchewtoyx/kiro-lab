@@ -1,0 +1,5 @@
+schema_version: 1
+kind: Resource
+id: resource:orders-db
+name: Orders database
+description: Relational store for orders and payment state.

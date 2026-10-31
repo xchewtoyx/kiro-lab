@@ -1,0 +1,5 @@
+schema_version: 1
+kind: Capability
+id: capability:card-payments
+name: Card payments
+description: The ability to deliver card payments to shoppers.

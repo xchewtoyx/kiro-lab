@@ -1,0 +1,6 @@
+schema_version: 1
+kind: Repository
+id: repository:example-vendor-forks/flag-server
+name: example-vendor-forks/flag-server
+description: Fork of a third-party flag server; org has no domain mapping.
+external_ref: github:example-vendor-forks/flag-server

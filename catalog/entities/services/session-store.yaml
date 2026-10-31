@@ -1,0 +1,11 @@
+schema_version: 1
+kind: Service
+id: service:session-store
+name: Session Store
+description: Legacy basket session cache, being replaced by the basket service.
+lifecycle: deprecated
+relationships:
+  - type: part_of
+    target: system:storefront
+  - type: uses
+    target: resource:session-cache

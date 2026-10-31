@@ -1,0 +1,6 @@
+schema_version: 1
+kind: Repository
+id: repository:example-platform/fulfilment
+name: example-platform/fulfilment
+description: Inventory sync.
+external_ref: github:example-platform/fulfilment

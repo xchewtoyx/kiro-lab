@@ -1,0 +1,17 @@
+schema_version: 1
+kind: Service
+id: service:basket
+name: Basket
+description: Holds a shopper's basket between visits.
+lifecycle: experimental
+owner: team:checkout
+runbook: runbooks/basket.md
+relationships:
+  - type: part_of
+    target: system:storefront
+  - type: implemented_by
+    target: repository:example-shop/checkout
+  - type: depends_on
+    target: service:catalogue-api
+  - type: uses
+    target: resource:session-cache

@@ -1,0 +1,45 @@
+# Allowed catalog relationship pairs for the synthetic lab catalog.
+schema_version: 1
+relations:
+  implemented_by:
+    sources: [Service]
+    targets: [Repository]
+    curation: referenced
+    semantics: The service's implementation lives in the named repository.
+  depends_on:
+    sources: [Service]
+    targets: [Service]
+    curation: hand-curated
+    semantics: >
+      The source service depends on the target service's published contract
+      remaining stable. A judgement call, not an inferred import graph.
+  part_of:
+    sources: [Service]
+    targets: [System]
+    curation: hand-curated
+    semantics: The service is a member of the named system.
+  provides:
+    sources: [Service]
+    targets: [Capability]
+    curation: hand-curated
+    semantics: The service provides the named capability.
+  uses:
+    sources: [Service]
+    targets: [Resource]
+    curation: hand-curated
+    semantics: The service uses the named supporting resource.
+  changes:
+    sources: [Project]
+    targets: [Service]
+    curation: referenced
+    semantics: The delivery project is expected to change the named service.
+  advances:
+    sources: [Project]
+    targets: [Objective]
+    curation: referenced
+    semantics: The delivery project advances the named objective.
+  targets:
+    sources: [Objective]
+    targets: [Capability]
+    curation: hand-curated
+    semantics: The objective is aimed at establishing or improving the capability.

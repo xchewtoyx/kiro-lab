@@ -1,0 +1,5 @@
+schema_version: 1
+kind: Capability
+id: capability:product-search
+name: Product search
+description: The ability to deliver product search to shoppers.

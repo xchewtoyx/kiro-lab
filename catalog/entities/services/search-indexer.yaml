@@ -1,0 +1,19 @@
+schema_version: 1
+kind: Service
+id: service:search-indexer
+name: Search Indexer
+description: Rebuilds the product search index from catalogue change events.
+lifecycle: production
+owner: team:search
+runbook: https://runbooks.example.com/search-indexer
+relationships:
+  - type: part_of
+    target: system:storefront
+  - type: implemented_by
+    target: repository:example-shop/search
+  - type: provides
+    target: capability:product-search
+  - type: depends_on
+    target: service:catalogue-api
+  - type: uses
+    target: resource:event-bus

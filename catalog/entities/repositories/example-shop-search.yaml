@@ -1,0 +1,6 @@
+schema_version: 1
+kind: Repository
+id: repository:example-shop/search
+name: example-shop/search
+description: Search indexer.
+external_ref: github:example-shop/search

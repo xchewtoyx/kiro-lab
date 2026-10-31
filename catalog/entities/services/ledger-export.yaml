@@ -1,0 +1,8 @@
+schema_version: 1
+kind: Service
+id: service:ledger-export
+name: "Ledger Export
+description: Nightly export of settled payments to the finance ledger.
+lifecycle: production
+  owner: team:payments
+ runbook: runbooks/ledger-export.md

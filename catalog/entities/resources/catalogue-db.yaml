@@ -1,0 +1,5 @@
+schema_version: 1
+kind: Resource
+id: resource:catalogue-db
+name: Catalogue database
+description: Relational store for products and prices.

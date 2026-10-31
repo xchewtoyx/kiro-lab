@@ -1,0 +1,13 @@
+schema_version: 1
+kind: Project
+id: project:checkout-retry
+name: Checkout payment retry
+description: Retry transient payment failures during checkout.
+external_ref: linear:project:00000000-0000-4000-8000-000000000002
+relationships:
+  - type: changes
+    target: service:checkout
+  - type: changes
+    target: service:payments-gateway
+  - type: advances
+    target: objective:reliable-checkout

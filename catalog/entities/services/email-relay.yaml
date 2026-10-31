@@ -1,0 +1,15 @@
+schema_version: 1
+kind: Service
+id: service:email-relay
+name: Email Relay
+description: Relays outbound email through a fictional mail provider.
+lifecycle: production
+owner: team:messaging
+runbook: runbooks/does-not-exist.md
+relationships:
+  - type: part_of
+    target: system:platform-core
+  - type: implemented_by
+    target: repository:example-platform/messaging
+  - type: provides
+    target: capability:customer-messaging
